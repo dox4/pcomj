@@ -50,11 +50,11 @@ public class CalculatorTest {
         CharParser point = symbol('.');
         Mapper<Pair<Character, String>, String> fractional = point.and(digitAccumulate).concat();
 
-        Mapper<Pair<String, String>, String> decimalGT1 = integer.and(fractional.option("")).convert(Pair::concat);
+        Mapper<Pair<String, String>, String> decimalGT1 = integer.and(fractional.option("")).map(Pair::concat);
         Mapper<Pair<Character, String>, String> decimalLT1 = symbol('0').and(fractional).concat();
 
         Mapper<String, Double> decimal = decimalGT1.or(decimalLT1)
-                .convert(Double::parseDouble);
+                .map(Double::parseDouble);
 
 //        Convertor<String, Double> decimal =
 //                integer.or(symbol('0').convert(String::valueOf))
@@ -64,9 +64,9 @@ public class CalculatorTest {
         Mapper<Pair<Character, Double>, Double> signedNumber =
                 sign.option('+')
                         .and(decimal)
-                        .convert(pair -> pair.first() == '-' ? -pair.second() : pair.second());
+                        .map(pair -> pair.first() == '-' ? -pair.second() : pair.second());
 
-        return signedNumber.convert(PrimaryExpr::new);
+        return signedNumber.map(PrimaryExpr::new);
     }
 
     private AbstractParserCombinator<BiExpr> op(char ch) {
@@ -78,7 +78,7 @@ public class CalculatorTest {
                 .takeLeft(op)
                 .takeLeft(sp)
                 .and(operand)
-                .convert(pair -> BiExpr.with(ch, pair.first(), pair.second()));
+                .map(pair -> BiExpr.with(ch, pair.first(), pair.second()));
 
     }
 

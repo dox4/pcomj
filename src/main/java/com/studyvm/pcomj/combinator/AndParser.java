@@ -30,6 +30,6 @@ public class AndParser<T, U> extends AbstractParserCombinator<Pair<T, U>> {
     }
 
     public Mapper<Pair<T, U>, String> concat() {
-        return convert(Pair::concat);
+        return map(Pair::concat);
     }
 }

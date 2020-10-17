@@ -2,10 +2,7 @@ import com.studyvm.pcomj.adaptor.Accumulator;
 import com.studyvm.pcomj.base.Pair;
 import com.studyvm.pcomj.base.ParseResult;
 import com.studyvm.pcomj.base.ParserInput;
-import com.studyvm.pcomj.combinator.AndParser;
-import com.studyvm.pcomj.combinator.ManyParser;
-import com.studyvm.pcomj.combinator.OrParser;
-import com.studyvm.pcomj.combinator.TakeLeftParser;
+import com.studyvm.pcomj.combinator.*;
 import com.studyvm.pcomj.parser.CharParser;
 import org.junit.jupiter.api.Test;
 
@@ -71,5 +68,15 @@ public class CombinatorTest {
         Optional<ParseResult<Integer>> r = naturalInParens.parse(new ParserInput("(1234)"));
         assertTrue(r.isPresent());
         assertEquals(1234, r.get().value());
+    }
+
+    @Test
+    public void testAtLeast() {
+        AtLeastParser<Character> a = symbol('a').atLeast(2);
+        Optional<ParseResult<List<Character>>> r1 = a.parse(new ParserInput("aaa"));
+        assertTrue(r1.isPresent());
+        assertEquals(r1.get().value().size(), 3);
+        Optional<ParseResult<List<Character>>> r2 = a.parse(new ParserInput("a"));
+        assertFalse(r2.isPresent());
     }
 }

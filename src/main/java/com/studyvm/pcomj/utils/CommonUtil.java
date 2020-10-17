@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public abstract class CommonUtil {
+public class CommonUtil {
     public static <R> Optional<ParseResult<R>> makeResult(R value, ParserInput s) {
         return Optional.of(new ParseResult<>(value, s));
     }

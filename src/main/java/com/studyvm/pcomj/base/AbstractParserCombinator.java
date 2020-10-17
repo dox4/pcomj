@@ -31,7 +31,7 @@ public abstract class AbstractParserCombinator<T> implements Parser<T> {
         return new TakeRightParser<>(this, right);
     }
 
-    public <R> Mapper<T, R> convert(Function<T, R> convertor) {
+    public <R> Mapper<T, R> map(Function<T, R> convertor) {
         return new Mapper<>(this, convertor);
     }
 
@@ -49,5 +49,13 @@ public abstract class AbstractParserCombinator<T> implements Parser<T> {
 
     public <U> ChainRightParser<T, U> chainRight(Parser<List<U>> listParser, BiFunction<U, T, T> reducer) {
         return new ChainRightParser<>(this, listParser, reducer);
+    }
+
+    public AtLeastParser<T> atLeast(int n) {
+        return new AtLeastParser<>(this, n);
+    }
+
+    public AtLeastParser<T> some() {
+        return atLeast(1);
     }
 }

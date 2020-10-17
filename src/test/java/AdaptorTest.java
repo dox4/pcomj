@@ -31,17 +31,17 @@ public class AdaptorTest {
         TestInputs.NUMBERS.clear();
         Mapper<String, Double> decimal = digit1To9.accumulate()
                 .and(symbol('.'))
-                .convert(pair -> pair.first() + pair.second())
+                .map(pair -> pair.first() + pair.second())
                 .and(digit0To9.accumulate())
-                .convert(pair -> pair.first() + pair.second())
-                .convert(Double::parseDouble);
+                .map(pair -> pair.first() + pair.second())
+                .map(Double::parseDouble);
         Optional<ParseResult<Double>> result = decimal.parse(TestInputs.NUMBERS);
         assertTrue(result.isPresent());
         assertEquals(1234.5678, result.get().value());
 
         TestInputs.NUMBERS.clear();
         OptionParser<Character> sign = symbol('+').or(symbol('-')).option('+');
-        Mapper<Pair<Character, Double>, Double> number = sign.and(decimal).convert(pair -> pair.first() == '-' ? -pair.second() : pair.second());
+        Mapper<Pair<Character, Double>, Double> number = sign.and(decimal).map(pair -> pair.first() == '-' ? -pair.second() : pair.second());
         Optional<ParseResult<Double>> r2 = number.parse(new ParserInput("-3.1415926"));
         assertTrue(r2.isPresent());
         assertEquals(-3.1415926, r2.get().value());

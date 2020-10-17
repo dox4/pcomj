@@ -3,6 +3,7 @@ package com.studyvm.pcomj.utils;
 import com.studyvm.pcomj.adaptor.Accumulator;
 import com.studyvm.pcomj.base.AbstractParserCombinator;
 import com.studyvm.pcomj.base.Parser;
+import com.studyvm.pcomj.combinator.AltParser;
 import com.studyvm.pcomj.combinator.SatisfyParser;
 import com.studyvm.pcomj.combinator.StringAccumulator;
 import com.studyvm.pcomj.combinator.TakeLeftParser;
@@ -11,6 +12,7 @@ import com.studyvm.pcomj.parser.OneOfParser;
 import com.studyvm.pcomj.parser.SkipManyParser;
 import com.studyvm.pcomj.parser.StringParser;
 
+import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
@@ -44,6 +46,12 @@ public interface ParserBuilder {
     }
 
     static <T> SkipManyParser<T> skip(Parser<T> skipper) {
-        return new SkipManyParser<T>(skipper);
+        return new SkipManyParser<>(skipper);
+    }
+
+    @SuppressWarnings("unchecked")
+    // this method may cause heap pollution, so the user should take care of it.
+    static <T> AltParser<T> alt(Parser<T> ...parsers) {
+        return new AltParser<>(Arrays.asList(parsers));
     }
 }
